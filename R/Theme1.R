@@ -1,4 +1,16 @@
+#' Create a theme experiment instance for a ggplot
+#'
+#' @param ggObject A ggplot class object.
+#'
+#' @return An instance of environment
+#' @export
+#'
+#' @examples none
 Theme <- function(ggObject){
+  assertthat::assert_that(
+    is(ggObject, "ggplot"),
+    msg="The input argument should be a ggplot object."
+  )
   gg_themeApply <- new.env()
 
   gg_themeApply$.self <- ggObject
@@ -47,7 +59,7 @@ adoptFun  <- function(instance, theme1){
   )
 }
 
-restore  <- function(instance){
+restoreFun  <- function(instance){
   return(
     function(){
       instance$.backup -> toSelf
@@ -59,7 +71,7 @@ restore  <- function(instance){
 }
 
 
-export  <- function(instance){
+exportFun  <- function(instance){
   return(
     function(){
         return(instance$.self)
