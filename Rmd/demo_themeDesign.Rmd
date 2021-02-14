@@ -1,0 +1,281 @@
+---
+title: "台灣景氣循環"
+drake_cache: ".chart1_sunny"
+output: html_document
+params:
+  key: "公Aa-Ⅳ-1" 
+  memberNames: ["Mary", "cook"]
+  memberIds: ["410888292", "410772938"] 
+  imgPreName: "taiwanEconomicsGrowth.svg" 
+  imgPostName: "" 
+---
+
+key請由課綱選：
+新課綱：<https://docs.google.com/document/d/1o8UQIpy6GFqCgfUxc47fqyAPuEYrk3FLd7bB1EhYMVg>
+
+  * 圖片一定要有Title, subtitle, 及資料來源。
+
+
+```{r setup, include=FALSE, drake=F}
+knitr::opts_chunk$set(echo = TRUE, eval=F)
+library(drake)
+library(econDV)
+library(dplyr)
+
+```
+
+## makecondition
+
+```{r makecondition}
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(googledrive)
+library(readr)
+library(ggplot2)
+library(econDV)
+econDV::setup_chinese(need2Knit = F)
+rprojroot::is_rstudio_project -> .pj
+.pj$make_fix_file() -> .root
+
+imageFolder <- file.path(.root(),"img")
+dataFolder <- file.path(.root(),"data")
+
+if(!dir.exists(imageFolder)) dir.create(imageFolder)
+if(!dir.exists(dataFolder)) dir.create(dataFolder)
+xfun::download_file("https://www.dropbox.com/s/ysqu9z6an6chv0g/drake_theme.Rdata?dl=1")
+load("drake_theme.Rdata")
+```
+
+```{r}
+drake$.updateCache()
+drake$source_plan()
+drake$makePlan()
+```
+
+```{r}
+jsonlite::fromJSON("https://www.dropbox.com/s/48dath1cfsrckgm/A17000000J-030243-KjC.json?dl=1") -> stat_taiwan
+library(dplyr)
+library(ggplot2)
+xfun::download_file("https://www.dropbox.com/s/cz32f4kwj117txx/Theme1.R?dl=1")
+source("Theme1.R")
+```
+
+```{r}
+drake$loadTarget$graph1_theme()
+drake$loadTarget$graph2_theme()
+```
+
+```{r}
+graph1_theme + economist_timeSeriesThm
+```
+
+```{r}
+graph2_theme + economist_timeSeriesThm +
+  y_touchDownThm
+```
+```{r}
+# library(mytheme)
+graph2_themeTry <- Theme(graph2_theme)
+graph2_themeTry$.self
+graph2_themeTry$economist_timeSeries$show()
+graph2_themeTry$y_touchDown$show()
+graph2_themeTry$economist_timeSeries$adopt()
+graph2_themeTry$.self
+graph2_themeTry$y_touchDown$adopt()
+graph2_themeTry$.self
+
+ggsave(
+  graph2_themeTry$.self,
+  file="graph2_theme.svg",
+  width = ,
+  height = 
+)
+econDV::svgOpen("graph2_theme.svg")
+```
+
+```{r}
+ggplot+geom_XXX()+geom_YYY() -> ggObject
+```
+
+```{r}
+emptyFun <- function(){}
+theme1List <- list(
+  show = emptyFun,
+  export = emptyFun,
+  adopt = emptyFun
+)
+```
+
+```{r}
+theme1$show()
+theme1$export()
+theme1$adopt()
+```
+```{r}
+gg_themeApply$theme1 # for the purpose of imposing another theme design on top of the current one
+gg_themeApply$export()
+gg_themeApply$restore()
+```
+
+```{r}
+gg_themeApply <- list(
+  theme1 = theme1List,
+  export = emptyFun,
+  restore = emptyFun
+)
+
+```
+
+```{r}
+gg_themeApply$theme1$show()
+gg_themeApply$export()
+gg_themeApply$restore()
+```
+### 10.3
+
+```{r Theme}
+Theme <- function(ggObject){
+  
+  gg_themeApply <- new.env()
+  
+  gg_themeApply$.self <- ggObject
+  
+  exportFun <- emptyFun <- function(){}
+  
+  theme1List <- list(
+    show = showFun(gg_themeApply),
+    adopt = adoptFun(gg_themeApply)
+  )
+ 
+  
+  rlang::env_bind(
+    .env = gg_themeApply,
+    
+    economist_timeSeries = theme1List,
+    export = exportFun,
+    restore= restoreFun(gg_themeApply),
+  )
+    
+  return(gg_themeApply) 
+}
+
+## helper functions
+
+showFun <- function(gg_themeApply){
+  return(
+    function(){
+      gg_themeApply$.self +
+        economist_timeSeriesThm
+    }
+  )
+}
+
+adoptFun <- function(gg_themeApply){
+  return(
+    function(){
+      gg_themeApply$.backup <- 
+        gg_themeApply$.self
+      
+      gg_themeApply$.self <- 
+        gg_themeApply$.self +
+        economist_timeSeriesThm
+      
+    }
+  )
+}
+
+restoreFun <- function(gg_themeApply){
+  return(
+    function(){
+      gg_themeApply$.self <- gg_themeApply$.backup
+      
+    }
+    
+  )
+}
+
+economist_timeSeriesThm <- theme_classic(
+  ) +
+  theme(
+    axis.line.y = element_blank(),
+    panel.grid.major.y = element_line(
+      color="#d8d8d8"
+    ),
+    axis.ticks.y = element_blank(),
+  )
+```
+
+```{r}
+drake$.updateCache()
+drake$loadTarget$graph2_theme()
+graph2_theme
+```
+
+
+```{r}
+graph2_themeTryBeta <- 
+  Theme(graph2_theme)
+```
+
+```{r}
+graph2_themeTryBeta$economist_timeSeries$show()
+```
+
+```{r}
+graph2_themeTryBeta$.self
+```
+
+```{r}
+graph2_themeTryBeta$economist_timeSeries$adopt()
+```
+
+```{r}
+graph2_themeTryBeta$.self
+```
+
+```{r}
+graph2_themeTryBeta$restore()
+graph2_themeTryBeta$.self
+```
+
+
+```{r}
+environment(graph2_themeTryBeta$economist_timeSeries$show)
+```
+
+
+```{r}
+graph2_themeTryBeta$theme1$show()
+graph2_themeTryBeta$export()
+```
+
+```{r}
+graph2_themeTryBeta$.self
+```
+
+```{r}
+a <- list()
+a$x <- 5
+a$changeX=function(y) a$x <- y
+a
+
+a$changeX(3)
+a$x
+```
+
+  * Immutable
+   
+  
+
+```{r}
+b <- new.env()
+b$x <- 5
+b$changeX <- function(y) b$x <- y
+b$changeX(3)
+b$x
+```
+
+mutable
+
+
