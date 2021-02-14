@@ -16,5 +16,13 @@ An instance of environment
 Create a theme experiment instance for a ggplot
 }
 \examples{
-none
+\dontrun{
+drake$loadTarget$graph1_theme()
+drake$loadTarget$graph1_theme()
+graph1_theme
+gg1themTry <- Theme(graph1_theme)
+gg1themTry$economist_timeSeries$show()
+gg1themTry$economist_timeSeries$adopt()
+gg1themTry$.self
+}
 }

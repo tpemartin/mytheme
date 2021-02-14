@@ -5,7 +5,16 @@
 #' @return An instance of environment
 #' @export
 #'
-#' @examples none
+#' @examples
+#' \dontrun{
+#' drake$loadTarget$graph1_theme()
+#' drake$loadTarget$graph1_theme()
+#' graph1_theme
+#' gg1themTry <- Theme(graph1_theme)
+#' gg1themTry$economist_timeSeries$show()
+#' gg1themTry$economist_timeSeries$adopt()
+#' gg1themTry$.self
+#' }
 Theme <- function(ggObject){
   assertthat::assert_that(
     is(ggObject, "ggplot"),
